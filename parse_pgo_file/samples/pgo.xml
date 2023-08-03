@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<Mixture Version="PGOPHER 10.1.182 04 Dec 2018 20:59  64 bit (fpc 3.3.1 x86_64-Linux)">
+  <Species Name="Species" Jmax="60">
+    <AsymmetricMolecule Name="AsymmetricTop" PointGroup="C2v">
+      <AsymmetricManifold Name="Ground" Initial="True">
+        <AsymmetricTop Name="v=0">
+          <Parameter Name="Origin" Value="0.19019800998"/>
+          <Parameter Name="A" Value="2.64289685318559"/>
+          <Parameter Name="B" Value="0.303206994832245"/>
+          <Parameter Name="C" Value="0.646477952983893"/>
+        </AsymmetricTop>
+      </AsymmetricManifold>
+      <AsymmetricManifold Name="Excited">
+        <AsymmetricTop Name="v=1">
+          <Parameter Name="Origin" Value="1921.19202"/>
+          <Parameter Name="A" Value="1.2"/>
+          <Parameter Name="B" Value="1.2"/>
+          <Parameter Name="C" Value="0.8"/>
+        </AsymmetricTop>
+      </AsymmetricManifold>
+      <TransitionMoments Bra="Excited" Ket="Ground">
+        <CartesianTransitionMoment Bra="v=1" Ket="v=0"/>
+      </TransitionMoments>
+    </AsymmetricMolecule>
+  </Species>
+  <Parameter Name="Lorentzian" Value="0.4"/>
+  <Parameter Name="Temperature" Value="30"/>
+  <Parameter Name="Fmin" Value="1800"/>
+  <Parameter Name="Fmax" Value="2200"/>
+  <FormSettings Name="ConstantsWindow" ActiveObject="AsymmetricTop: Species - AsymmetricTop - Ground - v=0"/>
+</Mixture>
