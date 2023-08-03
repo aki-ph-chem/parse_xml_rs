@@ -31,5 +31,10 @@ path = "src/nested/nested.rs"
 name = "traverse"
 path = "src/nested/traverse.rs"
 
+# 部分木を取得する
+[[bin]]
+name = "get_subtree"
+path = "src/subtree/get_subtree.rs"
+
 [dependencies]
 xmltree = "0.10.3"

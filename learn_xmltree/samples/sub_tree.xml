@@ -1,0 +1,21 @@
+<root>
+    <hoge>
+        foo_foo
+        <ground>
+            ground_state 
+            <consts>
+                <a>12</a>
+                <b>23</b>
+                <c>21</c>
+            </consts>
+        </ground>
+    </hoge>
+    <excited>
+        excited_state 
+        <consts>
+            <a>21</a>
+            <b>32</b>
+            <c>12</c>
+        </consts>
+    </excited>
+</root>
