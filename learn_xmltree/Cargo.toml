@@ -1,0 +1,27 @@
+[package]
+name = "learn_xmltree"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+# nestのない基本的なxml
+
+[[bin]]
+name = "from_file"
+path = "src/basics/from_file.rs"
+
+[[bin]]
+name = "elements"
+path = "src/basics/elements.rs"
+
+[[bin]]
+name = "from_str"
+path = "src/basics/from_str.rs"
+
+[[bin]]
+name = "attribute"
+path = "src/basics/attribute.rs"
+
+[dependencies]
+xmltree = "0.10.3"
