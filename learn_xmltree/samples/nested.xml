@@ -1,0 +1,11 @@
+<root>
+    <hoges>
+        e_hoges
+        <fuga>e_fuga</fuga>
+        <piyo>e_piyo</piyo>
+        <foo>
+            e_foo
+            <boo>e_boo</boo>
+        </foo>
+    </hoges>
+</root>

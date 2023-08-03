@@ -6,7 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 # nestのない基本的なxml
-
 [[bin]]
 name = "from_file"
 path = "src/basics/from_file.rs"
@@ -22,6 +21,15 @@ path = "src/basics/from_str.rs"
 [[bin]]
 name = "attribute"
 path = "src/basics/attribute.rs"
+
+# nestされたxml
+[[bin]]
+name = "nested"
+path = "src/nested/nested.rs"
+
+[[bin]]
+name = "traverse"
+path = "src/nested/traverse.rs"
 
 [dependencies]
 xmltree = "0.10.3"
