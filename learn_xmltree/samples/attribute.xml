@@ -1,0 +1,5 @@
+<root>
+    <hoge x="12" y="23"></hoge>
+    <fuga x="21" y="32"></fuga>
+    <piyo name="hiyoko"></piyo>
+</root>
