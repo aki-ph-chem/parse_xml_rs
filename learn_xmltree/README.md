@@ -34,3 +34,52 @@ pub enum XMLNode {
     ProcessingInstruction(String, Option<String>),
 }
 ```
+
+### 3 各種メソッド
+
+1. `get_child()`
+
+`get_child()`は以下で定義されている。
+
+```Rust
+impl Element {
+    pub fn get_child<P: ElementPredicate>(&self, k: P) -> Option<&Element> {
+        self.children
+            .iter()
+            .filter_map(|e| match e {
+                    XMLNode::Element(elem) => Some(elem),
+                    _ => None,
+                    })
+        .find(|e| k.match_element(e))
+    }
+} 
+```
+
+構造体`Element`のフィールド`children`は`Vcc<XMLNode>`であるので`filter_mpa()`までの処理で、`Vec<Element>`へのイテレータが得られる。
+
+ここから先でポイントとなるのがトレイト`ElementPredicate`で以下で定義される。
+
+```Rust
+pub trait ElementPredicate {
+    fn match_element(&self, e: &Element) -> bool;
+}
+```
+
+このトレイトを実装するにはメソッド`match_element()`を実装する必要がある。
+まず要素が一個のタプル型`(T,)`に対する実装を見てみよう。
+
+```Rust
+impl<TN> ElementPredicate for (TN,)
+where
+    String: PartialEq<TN>,
+{
+    fn match_element(&self, e: &Element) -> bool {
+        e.name == self.0
+    }
+}
+```
+
+whrere句を見ると型`TN`には`String`型と比較可能であることを要求していて、
+処理では構造体`Element`のフィールド`name`とタプルの要素を比較して`bool`値を返している。
+
+`get_child()`に戻ると最後の`find()`で引数`k`に含まれる文字列が`Element.name`と一致する場合はそれを返すように処理が書かれている。
