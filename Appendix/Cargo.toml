@@ -9,4 +9,20 @@ edition = "2021"
 name = "debug_print"
 path = "src/debug_print.rs"
 
+[[bin]]
+name = "filter_map"
+path = "src/filter_map.rs"
+
+[[bin]]
+name = "filter"
+path = "src/filter.rs"
+
+[[bin]]
+name = "find_map"
+path = "src/find_map.rs"
+
+[[bin]]
+name = "find"
+path = "src/find.rs"
+
 [dependencies]
