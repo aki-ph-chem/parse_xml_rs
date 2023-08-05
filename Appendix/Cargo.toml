@@ -25,4 +25,8 @@ path = "src/find_map.rs"
 name = "find"
 path = "src/find.rs"
 
+[[bin]]
+name = "hash_set"
+path = "src/hash_set.rs"
+
 [dependencies]
