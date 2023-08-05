@@ -36,5 +36,9 @@ path = "src/nested/traverse.rs"
 name = "get_subtree"
 path = "src/subtree/get_subtree.rs"
 
+[[bin]]
+name = "nested_subtree"
+path = "src/subtree/nested_subtree.rs"
+
 [dependencies]
 xmltree = "0.10.3"

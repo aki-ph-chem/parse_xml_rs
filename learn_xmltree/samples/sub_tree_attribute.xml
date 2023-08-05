@@ -1,0 +1,18 @@
+<root>
+    <state name="ground_state">
+        <consts>
+            <parameter name="A" value="12"/>
+            <parameter name="B" value="23"/>
+            <parameter name="C" value="21"/>
+        </consts>
+    </state>
+    <hoge name="hoge_hoge">
+        <state name="excited_state">
+            <consts>
+                <parameter name="A" value="21"/>
+                <parameter name="B" value="32"/>
+                <parameter name="C" value="12"/>
+            </consts>
+        </state>
+    </hoge>
+</root>
