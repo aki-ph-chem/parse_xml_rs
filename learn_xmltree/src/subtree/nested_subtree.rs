@@ -1,6 +1,5 @@
 use xmltree::Element;
 use std::{error, fs};
-use std::collections::HashMap;
 
 #[derive(Debug)]
 struct Parameter{
@@ -27,31 +26,32 @@ impl Parameter {
             None => {return Err("Error: None");},
         };
 
-        let mut const_a = 0; 
-        let mut const_b = 0; 
-        let mut const_c = 0;
-        for c in child_child {
-            if let xmltree::XMLNode::Element(e) = c {
-                let mut name = String::new();
-                let mut v = String::new();
-                for (key, value) in e.attributes.iter() {
-                    if key == "name" {
-                        name = value.to_string();
-                    } else if key == "value" {
-                        v = value.to_string();
+        let mut parameter = Parameter{state: state.to_string(), const_a: 0, const_b: 0, const_c: 0};
+        for const_map in child_child {
+            if let xmltree::XMLNode::Element(element) = const_map {
+
+                let (name, value) = {
+                    let mut name = String::new();
+                    let mut v = 0;
+                    for (key, value) in element.attributes.iter() {
+                        match key.as_str() {
+                            "name" => {name = value.to_string();},
+                            "value" => {v = value.parse::<i32>().unwrap()}, 
+                            _ => { return  Err("Error: key name should be 'name' or 'value'")}
+                        }
                     }
-                }
-                if name == "A" {
-                    const_a = v.parse::<i32>().unwrap();
-                } else if name == "B" {
-                    const_b = v.parse::<i32>().unwrap();
-                } else if name == "C" {
-                    const_c = v.parse::<i32>().unwrap();
+                    (name, v)
+                };
+
+                match name.as_str() {
+                    "A" => {parameter.const_a = value},
+                    "B" => {parameter.const_b = value},
+                    "C" => {parameter.const_c = value},
+                    _ => {return Err("Error: const name should be 'A' or 'B' or 'C'")},
                 }
             }
         }
-
-        Ok(Parameter{state: state.to_string(), const_a, const_b, const_c})
+        Ok(parameter)
     }
 }
 
