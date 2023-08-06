@@ -82,6 +82,27 @@ impl RotationalConsts {
     }
 }
 
+#[derive(Debug)]
+struct Paremters {
+    name: String,
+    value: f64,
+}
+
+impl Paremters {
+    fn new(element: &xmltree::Element) -> Result<Paremters, &'static str> {
+        let mut name = String::new();
+        let mut value = 0.0;
+        for (key, v) in &element.attributes {
+            match key.as_str() {
+                "Name" => {name = v.to_string();},
+                "Value" => {value = v.parse::<f64>().unwrap();},
+                _ => {return Err("Error");},
+            }
+        }
+        Ok(Paremters{name, value})
+    }
+}
+
 fn main() -> Result<(), Box<dyn error::Error>> {
     let path = "samples/pgo.xml";
     let pgo_file = fs::File::open(path)?;
@@ -94,19 +115,26 @@ fn main() -> Result<(), Box<dyn error::Error>> {
 
     let mut mol = vec![]; 
     tr.traverse(elements, &mut mol);
-    //println!("mol : {:#?}", mol);
     
     let mut consts = vec![];
+    let mut paremeters = vec![];
     for m in mol {
         if &m.name == "AsymmetricManifold" {
-            let const_m = RotationalConsts::new(&m);
-            if let Ok(v) = const_m {
+            if let Ok(v) = RotationalConsts::new(&m) {
                 consts.push(v);
+            }
+        }else{
+            if let Ok(v) = Paremters::new(&m) {
+                paremeters.push(v);
             }
         } 
     }
 
     for i in consts {
+        println!("i = {:#?}", i);
+    }
+
+    for i in paremeters {
         println!("i = {:#?}", i);
     }
 
