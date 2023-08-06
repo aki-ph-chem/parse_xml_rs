@@ -26,6 +26,62 @@ impl Traverse<'_> {
     }
 }
 
+#[derive(Debug)]
+struct RotationalConsts{
+    state: String,
+    origin: f64,
+    const_a: f64,
+    const_b: f64,
+    const_c: f64,
+}
+
+impl RotationalConsts {
+    fn new(element: &xmltree::Element) -> Result<RotationalConsts, &'static str> {
+        let state = element.attributes["Name"].clone();
+
+        let child_child = match element.children.iter().next() {
+            Some(v) => {
+                match v {
+                    xmltree::XMLNode::Element(e) => &e.children,
+                    _ => {return Err("Error: Thre is no 'children'");},
+                }
+            },
+            None => {return Err("Error: None");},
+        };
+
+        let mut parameter = RotationalConsts{
+            state: state, origin: 0.0, 
+            const_a: 0.0, const_b: 0.0, const_c: 0.0};
+
+        for const_map in child_child {
+            if let xmltree::XMLNode::Element(element) = const_map {
+
+                let (name, value) = {
+                    let mut name = String::new();
+                    let mut value = 0.0;
+                    for (key, v) in element.attributes.iter() {
+                        match key.as_str() {
+                            "Name" => {name = v.to_string();},
+                            "Value" => {value = v.parse::<f64>().unwrap()}, 
+                            _ => { return  Err("Error: key name should be 'name' or 'value'")}
+                        }
+                    }
+                    (name, value)
+                };
+
+                match name.as_str() {
+                    "A" => {parameter.const_a = value},
+                    "B" => {parameter.const_b = value},
+                    "C" => {parameter.const_c = value},
+                    "Origin" => {parameter.origin = value},
+                    _ => {return Err("Error: const name should be 'A' or 'B' or 'C'")},
+                }
+            }
+        }
+        Ok(parameter)
+    }
+}
+
 fn main() -> Result<(), Box<dyn error::Error>> {
     let path = "samples/pgo.xml";
     let pgo_file = fs::File::open(path)?;
@@ -38,7 +94,21 @@ fn main() -> Result<(), Box<dyn error::Error>> {
 
     let mut mol = vec![]; 
     tr.traverse(elements, &mut mol);
-    println!("mol : {:#?}", mol);
+    //println!("mol : {:#?}", mol);
+    
+    let mut consts = vec![];
+    for m in mol {
+        if &m.name == "AsymmetricManifold" {
+            let const_m = RotationalConsts::new(&m);
+            if let Ok(v) = const_m {
+                consts.push(v);
+            }
+        } 
+    }
+
+    for i in consts {
+        println!("i = {:#?}", i);
+    }
 
     Ok(())
 }
