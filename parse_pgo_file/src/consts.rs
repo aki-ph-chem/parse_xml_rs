@@ -1,5 +1,33 @@
 use xmltree::Element;
-use std::{error, fs};
+use std::{error, fs, collections::HashMap};
+
+fn parse_dict<T>(dict: &HashMap<String, String>) -> Result<(String, T), &'static str>
+where
+    T: std::str::FromStr + Default,
+    <T as std::str::FromStr>::Err: std::fmt::Display,
+{
+    let mut name = String::new();
+    let mut value: T = Default::default();
+    for (key, v) in dict {
+        match key.as_str() {
+            "Name" => {
+                name = v.clone();
+            }
+            "Value" => {
+                value = match (*v).parse::<T>() {
+                    Ok(x) => x,
+                    Err(_err) => {
+                        return Err("Error: invalid literal");
+                    }
+                };
+            }
+            _ => {
+                return Err("Error: key must be 'Name' or 'Value'");
+            }
+        }
+    }
+    Ok((name, value))
+}
 
 struct Traverse<'a> {
     target_1: &'a str,
@@ -25,6 +53,7 @@ impl Traverse<'_> {
         }
     }
 }
+
 
 #[derive(Debug)]
 struct RotationalConsts{
@@ -55,20 +84,7 @@ impl RotationalConsts {
 
         for const_map in child_child {
             if let xmltree::XMLNode::Element(element) = const_map {
-
-                let (name, value) = {
-                    let mut name = String::new();
-                    let mut value = 0.0;
-                    for (key, v) in element.attributes.iter() {
-                        match key.as_str() {
-                            "Name" => {name = v.to_string();},
-                            "Value" => {value = v.parse::<f64>().unwrap()}, 
-                            _ => { return  Err("Error: key name should be 'name' or 'value'")}
-                        }
-                    }
-                    (name, value)
-                };
-
+               let (name, value) = parse_dict::<f64>(&element.attributes)?; 
                 match name.as_str() {
                     "A" => {parameter.const_a = value},
                     "B" => {parameter.const_b = value},
@@ -90,15 +106,7 @@ struct Paremters {
 
 impl Paremters {
     fn new(element: &xmltree::Element) -> Result<Paremters, &'static str> {
-        let mut name = String::new();
-        let mut value = 0.0;
-        for (key, v) in &element.attributes {
-            match key.as_str() {
-                "Name" => {name = v.to_string();},
-                "Value" => {value = v.parse::<f64>().unwrap();},
-                _ => {return Err("Error");},
-            }
-        }
+        let (name, value) = parse_dict(&element.attributes)?;
         Ok(Paremters{name, value})
     }
 }
