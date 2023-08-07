@@ -1,25 +1,11 @@
-#[derive(Debug)]
-enum TopType {
-    TypeA(String),
-    TypeB(String),
-    TypeC(String),
-}
-
 fn main() {
-    let vec_top_type = vec![
-        TopType::TypeA("hoo".to_string()),
-        TopType::TypeB("goo".to_string()),
-        TopType::TypeA("ooh".to_string()),
-        TopType::TypeC("oog".to_string()),
-        TopType::TypeA("oho".to_string()),
-        TopType::TypeC("ogo".to_string()),
-    ];
 
-    // filter: 今の所よくわからない
-    let type_a = vec_top_type
+    let array = [12, 15, 7, 3, 5, 10];
+
+    let array_over_10: Vec<&i32> = array
         .iter()
-        .filter(|s| match s {
-            TopType::TypeA(s) => Some(s).is_some(),
-            _ => None.is_none(),
-        });
+        .filter(|x| **x >= 10)
+        .collect();
+
+    println!("araay_over_10 = {:#?}", array_over_10);
 }
