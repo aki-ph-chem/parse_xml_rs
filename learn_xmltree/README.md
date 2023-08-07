@@ -1,5 +1,9 @@
 # クレート xmltreeのメモ
 
+参考: https://github.com/eminence/xmltree-rs
+
+公式のドキュメントを読んでもイマイチだったのでソースコードを読んだときのメモ。
+
 ## struct
 
 ### 1 struct xmltree::Element
@@ -66,7 +70,7 @@ pub trait ElementPredicate {
 ```
 
 このトレイトを実装するにはメソッド`match_element()`を実装する必要がある。
-まず要素が一個のタプル型`(T,)`に対する実装を見てみよう。
+まず要素が一個のタプル型`(TN,)`に対する実装を見てみよう。
 
 ```Rust
 impl<TN> ElementPredicate for (TN,)
@@ -82,4 +86,10 @@ where
 whrere句を見ると型`TN`には`String`型と比較可能であることを要求していて、
 処理では構造体`Element`のフィールド`name`とタプルの要素を比較して`bool`値を返している。
 
+トレイト`ElementPredicate`は`(TN,)`以外にも`&str`,`Cow<str>`,`String`,`(TN, NS)`
+にも実装されている。
+
 `get_child()`に戻ると最後の`find()`で引数`k`に含まれる文字列が`Element.name`と一致する場合はそれを返すように処理が書かれている。
+
+`get_child()`は上の定義を見ると分かる通り`Element`の`children`フィールドのみを探索するので、ネストされたタグを見つけることはできない。
+それを行いたいならば、再帰関数などでトラバースする処理を自分で実装する必要がある。
