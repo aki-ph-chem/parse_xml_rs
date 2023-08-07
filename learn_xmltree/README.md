@@ -22,11 +22,15 @@ pub struct Element {
 }
 ```
 
-`AttributeMap<String, String>`は`std::collections::HashMap<String, String>`のaliasである。
+この中で重要なのは子要素を表現する`children`と属性値を表現する`attribute`である。
+
+`attribute`を表現する型`AttributeMap<String, String>`は`std::collections::HashMap<String, String>`のaliasである。
+
+例えば以下のような
 
 ### 2 enum xmltree::XMLNode
 
-子ノードを表現する`xmltree::XMLNode`について
+子ノード(children: Vec\<XMLNode\>)を表現する`xmltree::XMLNode`について
 
 定義
 ```Rust
@@ -93,3 +97,48 @@ whrere句を見ると型`TN`には`String`型と比較可能であることを�
 
 `get_child()`は上の定義を見ると分かる通り`Element`の`children`フィールドのみを探索するので、ネストされたタグを見つけることはできない。
 それを行いたいならば、再帰関数などでトラバースする処理を自分で実装する必要がある。
+
+# コードの説明
+
+## src/basics
+
+基本的なxml構造の取り扱い
+
+### 1 from\_str.rs:  
+
+`&str`型の文字列としてxmlを与え、パースしてメモリ上にDOMツリー構造を構築する。
+構築後は`get_child()`で要素を取り出す。
+
+### 2 form\_file.rs
+
+xmlをファイルとして読み込んで、パースしてメモリ上にDOMツリー構造を構築する。
+
+### 3 element.rs
+
+xmlのDOMツリーからタグの名前で要素を取り出す。
+
+### 4 attribute.rs
+
+xmlの属性値を取り出す。
+
+## src/nested
+
+ネストされたxml構造の取り扱い
+
+### 1 nested.rs
+
+ネストされた一部分を取り出す。
+
+### 2 traverse.rs
+
+再帰関数による深さ優先探索でネストされた構造をトラバースする。
+
+## src/subtree
+
+### 1 get\_subtree.rs
+
+トラバースして部分木を取り出す
+
+### 2 nested\_subtree.rs
+
+複数の部分木を取り出して、構造体にデシリアライズする。
